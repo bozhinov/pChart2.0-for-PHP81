@@ -26,7 +26,7 @@ class Token implements \Countable
 		return $this->shiftByteCount;
 	}
 
-	public function count()
+	public function count() : int
 	{
 		return $this->bitCount;
 	}
