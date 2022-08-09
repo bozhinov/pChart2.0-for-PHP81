@@ -222,12 +222,12 @@ class pData
 	{
 		if (isset($this->Data["ScatterSeries"][$Id])) {
 
-			(isset($Props["Shape"]))	AND $this->Data["ScatterSeries"][$Id]["Shape"]	     = intval($Props["Shape"]);
-			(isset($Props["Description"]))	AND $this->Data["ScatterSeries"][$Id]["Description"] = strval($Props["Description"]);
-			(isset($Props["Picture"]))	AND $this->Data["ScatterSeries"][$Id]["Picture"]     = strval($Props["Picture"]);
-			(isset($Props["isDrawable"]))	AND $this->Data["ScatterSeries"][$Id]["isDrawable"]  = boolval($Props["isDrawable"]);
-			(isset($Props["Ticks"]))	AND $this->Data["ScatterSeries"][$Id]["Ticks"]	     = intval($Props["Ticks"]);
-			(isset($Props["Weight"]))	AND $this->Data["ScatterSeries"][$Id]["Weight"]	     = intval($Props["Weight"]);
+			(isset($Props["Shape"]))		AND $this->Data["ScatterSeries"][$Id]["Shape"]		= intval($Props["Shape"]);
+			(isset($Props["Description"]))	AND $this->Data["ScatterSeries"][$Id]["Description"]= strval($Props["Description"]);
+			(isset($Props["Picture"]))		AND $this->Data["ScatterSeries"][$Id]["Picture"]	= strval($Props["Picture"]);
+			(isset($Props["isDrawable"]))	AND $this->Data["ScatterSeries"][$Id]["isDrawable"]	= boolval($Props["isDrawable"]);
+			(isset($Props["Ticks"]))		AND $this->Data["ScatterSeries"][$Id]["Ticks"]		= intval($Props["Ticks"]);
+			(isset($Props["Weight"]))		AND $this->Data["ScatterSeries"][$Id]["Weight"]		= intval($Props["Weight"]);
 			if (isset($Props["Color"])) {
 				if ($Props["Color"] instanceof pColor){
 					$this->Data["ScatterSeries"][$Id]["Color"] = $Props["Color"];
@@ -276,7 +276,7 @@ class pData
 
 		$this->Data["Min"] = $GlobalMin;
 		$this->Data["Max"] = $GlobalMax;
-		return [$GlobalMin,$GlobalMax];
+		return [$GlobalMin, $GlobalMax];
 	}
 
 	/* Mark all series as drawable */
@@ -314,12 +314,12 @@ class pData
 	{
 		if (isset($this->Data["Axis"][$AxisID])) {
 
-			(isset($Props["Unit"]))     AND $this->Data["Axis"][$AxisID]["Unit"] 	 = strval($Props["Unit"]);
-			(isset($Props["Name"]))     AND $this->Data["Axis"][$AxisID]["Name"] 	 = strval($Props["Name"]);
-			(isset($Props["Display"]))  AND $this->Data["Axis"][$AxisID]["Display"]  = intval($Props["Display"]);
-			(isset($Props["Format"]))   AND $this->Data["Axis"][$AxisID]["Format"] 	 = $Props["Format"];
-			(isset($Props["Position"])) AND $this->Data["Axis"][$AxisID]["Position"] = intval($Props["Position"]);
-			(isset($Props["Identity"])) AND $this->Data["Axis"][$AxisID]["Identity"] = intval($Props["Identity"]);
+			(isset($Props["Unit"]))		AND $this->Data["Axis"][$AxisID]["Unit"]	 = strval($Props["Unit"]);
+			(isset($Props["Name"]))		AND $this->Data["Axis"][$AxisID]["Name"]	 = strval($Props["Name"]);
+			(isset($Props["Display"]))	AND $this->Data["Axis"][$AxisID]["Display"]	 = intval($Props["Display"]);
+			(isset($Props["Format"]))	AND $this->Data["Axis"][$AxisID]["Format"]	 = $Props["Format"];
+			(isset($Props["Position"]))	AND $this->Data["Axis"][$AxisID]["Position"] = intval($Props["Position"]);
+			(isset($Props["Identity"]))	AND $this->Data["Axis"][$AxisID]["Identity"] = intval($Props["Identity"]);
 			if (isset($Props["Color"])) {
 				if ($Props["Color"] instanceof pColor){
 					$this->Data["Axis"][$AxisID]["Color"] = $Props["Color"];

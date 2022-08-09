@@ -145,12 +145,9 @@ class pDraw
 {
 	/* GD picture object */
 	protected $Picture;
-	/* Image settings, size, quality, .. */
-	private $XSize = 0; // Width of the picture
-	private $YSize = 0; // Height of the picture
+
 	private $Antialias = TRUE; // Turn anti alias on or off
 	private $AntialiasQuality = 0; // Quality of the anti aliasing implementation (0-1)
-	private $TransparentBackground = FALSE;
 	/* Graph area settings */
 	private $GraphAreaX1 = 0; // Graph area X origin
 	private $GraphAreaY1 = 0; // Graph area Y origin
@@ -170,40 +167,40 @@ class pDraw
 	private $ShadowColorAlloc;
 
 	/* Data Set - read only would have been nice to have */
-	public $myData;
+	public pData $myData;
 
-	/* Class constructor */
-	function __construct(int $XSize, int $YSize, bool $TransparentBackground = FALSE)
+	/* Class constructor
+		$XSize => Width of the picture
+		$YSize => Height of the picture
+		$TransparentBackground => PNG transparency
+	 */
+	function __construct(private int $XSize = 0, private int $YSize = 0, private bool $TransparentBackground = FALSE)
 	{
 		$this->myData = new pData();
 
-		$this->XSize = $XSize;
-		$this->YSize = $YSize;
-
 		/* Momchil: I will leave it here in case someone needs it
 		$memory_limit = ini_get("memory_limit");
-		if (intval($memory_limit) * 1024 * 1024 < $XSize * $YSize * 3 * 1.7){ # Momchil: for black & white gifs -> use 1 and not 3
+		if (intval($memory_limit) * 1024 * 1024 < $this->XSize * $this->YSize * 3 * 1.7){ # Momchil: for black & white gifs -> use 1 and not 3
 			echo "Memory limit: ".$memory_limit." Mb ".PHP_EOL;
-			echo "Estimated required: ".round(($XSize * $YSize * 3 * 1.7)/(1024 * 1024), 3)." Mb ".PHP_EOL;
+			echo "Estimated required: ".round(($this->XSize * $this->YSize * 3 * 1.7)/(1024 * 1024), 3)." Mb ".PHP_EOL;
 			$this->Picture = imagecreatetruecolor(1, 1);
 			throw pException::InvalidDimentions("Can not allocate enough memory for an image that big! Check your PHP memory_limit configuration option.");
 		}
 		*/
 
-		$this->Picture = imagecreatetruecolor($XSize, $YSize);
+		$this->Picture = imagecreatetruecolor($this->XSize, $this->YSize);
 		if ($this->Picture == FALSE){
 			throw pException::InvalidDimentions("Failed to create true color image!");
 		}
 
-		$this->TransparentBackground = $TransparentBackground;
-		if ($TransparentBackground) {
+		if ($this->TransparentBackground) {
 			imagealphablending($this->Picture, FALSE); #  TRUE by default on True color images
-			imagefilledrectangle($this->Picture, 0, 0, $XSize, $YSize, imagecolorallocatealpha($this->Picture, 255, 255, 255, 127));
+			imagefilledrectangle($this->Picture, 0, 0, $this->XSize, $this->YSize, imagecolorallocatealpha($this->Picture, 255, 255, 255, 127));
 			imagealphablending($this->Picture, TRUE);
 			imagesavealpha($this->Picture, TRUE);
 		} else {
 			# Momchil: $this->allocateColor([255,255,255,100]); sets alpha at 1.27 which is not completely transparent
-			imagefilledrectangle($this->Picture, 0, 0, $XSize, $YSize, imagecolorallocatealpha($this->Picture, 255, 255, 255, 0));
+			imagefilledrectangle($this->Picture, 0, 0, $this->XSize, $this->YSize, imagecolorallocatealpha($this->Picture, 255, 255, 255, 0));
 		}
 
 		/* default shadow color */
