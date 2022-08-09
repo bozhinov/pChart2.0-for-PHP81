@@ -9,13 +9,14 @@ echo "\r\n Using PHP ".phpversion()."\r\n\r\n";
 $bench_start = microtime(true);
 
 $bench_ignored = [
-	"examples/example.pyramid.php"
+	"examples/example.pyramid.php",
+	"examples/example.barcode.upce.php"
 ];
 
 function bench_progress_bar($done, $total, $info="", $width=50) {
-    $perc = intval(round(($done * 100) / $total));
-    $bar = intval(round(($width * $perc) / 100));
-    return sprintf("%s%%[%s>%s]%s\r", $perc, str_repeat("=", $bar), str_repeat(" ", $width-$bar), $info);
+	$perc = intval(round(($done * 100) / $total));
+	$bar = intval(round(($width * $perc) / 100));
+	return sprintf("%s%%[%s>%s]%s\r", $perc, str_repeat("=", $bar), str_repeat(" ", $width-$bar), $info);
 }
 
 $bench_allFiles = glob("examples/example.*");
@@ -24,8 +25,8 @@ $bench_i = 0;
 
 foreach ($bench_allFiles as $bench_fileName){
 	if (!in_array($bench_fileName, $bench_ignored)){
-		//echo "Processing: ".$bench_fileName."\r\n";
-		eval('?>' . file_get_contents($bench_fileName, TRUE) . '<?php ');
+		#echo "Processing: ".$bench_fileName."\r\n";
+		eval(str_ireplace('<?php', '', file_get_contents($bench_fileName, TRUE)));
 	} #else {
 		#echo "Ignored: ".$bench_fileName."\r\n";
 	#}
