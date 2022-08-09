@@ -89,5 +89,5 @@ $myPicture->writeLabel(["Inbound"],[720]);
 $myPicture->drawLegend(580,20,["Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL]);
 
 /* Render the picture (choose the best way) */
-$myPicture->autoOutput("temp/example.drawSplineChart.network.png");
+$myPicture->autoOutput("temp/example.drawLineChart.network.png");
 
