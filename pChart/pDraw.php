@@ -213,7 +213,7 @@ class pDraw
 
 	function __destruct()
 	{
-		if (is_resource($this->Picture)){
+		if (is_object($this->Picture)){
 			imagedestroy($this->Picture);
 		}
 	}
