@@ -1,7 +1,7 @@
  Code is being tested against PHP versions 8.1+<br />
  PHP version 8.1 brings breaking changes to imagefilledpolygon and count<br />
  
-  pChart 2.4 (in progress)
+  pChart 3.0 (in progress)
 ===================
 Major changes:
  - Removed pImageMap, pCache, pBarcode
