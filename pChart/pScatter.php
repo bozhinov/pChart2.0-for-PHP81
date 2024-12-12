@@ -606,7 +606,7 @@ class pScatter
 		foreach($Data["ScatterSeries"] as $Series) {
 			if ($Series["isDrawable"]) {
 
-				$Lines = explode(PHP_EOL, $Serie["Description"]);
+				$Lines = explode(PHP_EOL, $Series["Description"]);
 
 				if ($Mode == LEGEND_VERTICAL) {
 					$BoxArray = $this->myPicture->getTextBox($vX + $IconAreaWidth + 4, $vY + $HalfIconAreaHeight, $FontName, $FontSize, 0, $Series["Description"]);
@@ -676,7 +676,7 @@ class pScatter
 					}
 				}
 
-				$Lines = explode(PHP_EOL, $Serie["Description"]);
+				$Lines = explode(PHP_EOL, $Series["Description"]);
 
 				if ($Mode == LEGEND_VERTICAL) {
 					foreach($Lines as $Key => $Value) {
@@ -793,14 +793,14 @@ class pScatter
 				}
 
 				$n = count($PosArrayX);
-				if ((($n * $Sxx) == ($Sx * $Sx))) { # Momchil: No example goes in here
+				if (($n * $Sxx) == ($Sx * $Sx)) { # Momchil: No example goes in here
 					$X1 = $GraphAreaCoordinates['L'] + $XAxisData["Margin"];
 					$X2 = $X1;
 					$Y1 = $GraphAreaCoordinates["T"];
 					$Y2 = $GraphAreaCoordinates["B"];
 				} else {
 					$M = (($n * $Sxy) - ($Sx * $Sy)) / (($n * $Sxx) - ($Sx * $Sx));
-					$B = (($Sy) - ($M * $Sx)) / ($n);
+					$B = (($Sy) - ($M * $Sx)) / $n;
 					$X1 = $GraphAreaCoordinates['L'] + $XAxisData["Margin"];
 					$Y1 = $this->getPosArraySingle($M * $XAxisData["ScaleMin"] + $B, $YAxisData);
 					$X2 = $this->getPosArraySingle($XAxisData["ScaleMax"], $XAxisData);
