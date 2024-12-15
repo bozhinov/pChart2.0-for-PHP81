@@ -1550,7 +1550,7 @@ class pDraw
 				($IconAreaHeight < $PicHeight) AND $IconAreaHeight = $PicHeight;
 			}
 		}
-
+		# $FontSize or $this->FontSize ?? TODO
 		$YStep = max($this->FontSize, $IconAreaHeight) + 5;
 		#$XStep = $IconAreaWidth + 5;
 		$XStep = $XSpacing;
@@ -1860,7 +1860,7 @@ class pDraw
 				for ($ID = 0; $ID <= max($Series) - 1; $ID++) {
 					$PointMin = 0;
 					$PointMax = 0;
-					foreach($Series as $SerieID => $ValuesCount) {
+					foreach($Series as $SerieID => $ValuesCount) { # TODO
 						if (isset($Data["Series"][$SerieID]["Data"][$ID]) && !is_null($Data["Series"][$SerieID]["Data"][$ID])) {
 							$Value = $Data["Series"][$SerieID]["Data"][$ID];
 							if ($Value > 0) {
@@ -2892,8 +2892,7 @@ class pDraw
 				$XPos = ($XPos2 - $XPos1) / 2 + $XPos1;
 				$YPos = ($YPos2 - $YPos1) / 2 + $YPos1;
 				if ($NameAngle == ZONE_NAME_ANGLE_AUTO) {
-					$TxtPos = $this->getTextBox($XPos, $YPos, $this->FontName, $this->FontSize, 0, $AreaName);
-					$TxtWidth = $TxtPos[1]["X"] - $TxtPos[0]["X"];
+					list($TxtWidth, ) = $this->getTextBoxStdHW($this->FontName, $this->FontSize, $AreaName);
 					$NameAngle = (abs($XPos2 - $XPos1) > $TxtWidth) ? 0 : 90; 
 				}
 
@@ -3113,8 +3112,7 @@ class pDraw
 				$XPos = ($YPos2 - $YPos1) / 2 + $YPos1;
 				$YPos = ($XPos2 - $XPos1) / 2 + $XPos1;
 				if ($NameAngle == ZONE_NAME_ANGLE_AUTO) {
-					$TxtPos = $this->getTextBox($XPos, $YPos, $this->FontName, $this->FontSize, 0, $AreaName);
-					$TxtWidth = $TxtPos[1]["X"] - $TxtPos[0]["X"];
+					list($TxtWidth, ) = $this->getTextBoxStdHW($this->FontName, $this->FontSize, $AreaName);
 					$NameAngle = (abs($XPos2 - $XPos1) > $TxtWidth) ? 0 : 90;
 				}
 
@@ -3683,9 +3681,8 @@ class pDraw
 			$TitleWidth = 0;
 			$TitleHeight = 0;
 		} else {
-			$TxtPos = $this->getTextBox($X, $Y, $FontName, $FontSize, 0, $Title);
-			$TitleWidth = ($TxtPos[1]["X"] - $TxtPos[0]["X"]) + $VerticalMargin * 2;
-			$TitleHeight = ($TxtPos[0]["Y"] - $TxtPos[2]["Y"]);
+			list($TitleWidth, $TitleHeight) = $this->getTextBoxStdHW($FontName, $FontSize, $Title);
+			$TitleWidth += $VerticalMargin * 2;
 		}
 
 		$CaptionWidth = 0;
@@ -3695,9 +3692,9 @@ class pDraw
 		}
 
 		foreach($Captions as $Caption) {
-			$TxtPos = $this->getTextBox($X, $Y, $FontName, $FontSize, 0, $Caption["Caption"]);
-			$CaptionWidth = max($CaptionWidth, ($TxtPos[1]["X"] - $TxtPos[0]["X"]) + $VerticalMargin * 2);
-			$CaptionHeight +=  max(($TxtPos[0]["Y"] - $TxtPos[2]["Y"]), ($SerieBoxSize + 2)) + $HorizontalMargin;
+			list($TxtWidth, $TxtHeight) = $this->getTextBoxStdHW($FontName, $FontSize, $Caption["Caption"]);
+			$CaptionWidth = max($CaptionWidth, $TxtWidth + $VerticalMargin * 2);
+			$CaptionHeight +=  max($TxtHeight, ($SerieBoxSize + 2)) + $HorizontalMargin;
 		}
 
 		($CaptionHeight <= 5) AND $CaptionHeight += $HorizontalMargin / 2;
@@ -3777,8 +3774,7 @@ class pDraw
 		$XPos = $XMin + $VerticalMargin + $SerieBoxSize + $SerieBoxSpacing;
 
 		foreach($Captions as $Caption) {
-			$TxtPos = $this->getTextBox($XPos, $YPos, $FontName, $FontSize, 0, $Caption["Caption"]);
-			$CaptionHeight = ($TxtPos[0]["Y"] - $TxtPos[2]["Y"]);
+			list(,$CaptionHeight) = $this->getTextBoxStdHW($FontName, $FontSize, $Caption["Caption"]);
 			/* Write the serie color if needed */
 			if ($DrawSerieColor) {
 				$BoxSettings = ["Color" => $Caption["Color"],"BorderColor" => new pColor(0)];
@@ -3860,7 +3856,7 @@ class pDraw
 			$this->ShadowY = $Format["Y"];
 		}
 
-		if (isset($Format["Color"])){
+		if(isset($Format["Color"])){
 			$this->ShadowColor = $Format["Color"];
 			$this->ShadowColorAlloc = $this->allocateColor($this->ShadowColor->get());
 		}
@@ -3941,11 +3937,20 @@ class pDraw
 		return (($Angle > 0) ? $Angle : (360 - abs($Angle)));
 	}
 
+	/* Return the surrounding box of text area W & H*/
+	public function getTextBoxStdHW($FontName, $FontSize, $Text)
+	{
+		$coords = imageftbbox($FontSize, 0, realpath($FontName), $Text);
+		return [
+			abs(round($coords[2] - $coords[0])), # w
+			abs(round($coords[7] - $coords[1]))  # h
+		];
+	}
+
 	/* Return the surrounding box of text area */
 	public function getTextBox($X, $Y, $FontName, $FontSize, $Angle, $Text)
 	{
-		$this->verifyFontDefined();
-		$coords = imagettfbbox($FontSize, 0, realpath($FontName), $Text);
+		$coords = imageftbbox($FontSize, 0, realpath($FontName), $Text);
 		$a = deg2rad($Angle);
 		$ca = cos($a);
 		$sa = sin($a);
