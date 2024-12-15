@@ -1851,18 +1851,17 @@ class pDraw
 			} elseif ($Mode == SCALE_MODE_ADDALL || $Mode == SCALE_MODE_ADDALL_START0) {
 
 				$sArray = [];
-				$AxisMin = 0;
 				foreach ($Data["Series"] as $SerieID => $d) {
 					if ($d["Axis"] == $AxisID && $d["isDrawable"] && $Abscissa != $SerieID) {
 					  foreach ($d["Data"] as $id => $value) {
 						isset($sArray[$id]) || $sArray[$id] = 0;
 						$sArray[$id] += $value;
-						$AxisMin = min($value, $AxisMin);
 					  }
 					}
 				}
 
 				$AxisMax = max($sArray);
+				$AxisMin = min($sArray);
 				$AutoMargin = (($AxisMax - $AxisMin) / 100) * $XReleasePercent;
 				$Data["Axis"][$AxisID]["Min"] = $AxisMin - $AutoMargin;
 				$Data["Axis"][$AxisID]["Max"] = $AxisMax + $AutoMargin;
