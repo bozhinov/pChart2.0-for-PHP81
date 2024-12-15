@@ -1411,9 +1411,9 @@ class pCharts
 							if ($DisplayValues && $Serie["Data"][$Key] != VOID) {
 								($DisplayShadow) AND $this->myPicture->setShadow(TRUE);
 								$Caption = $this->myPicture->scaleFormat($Serie["Data"][$Key], $Data["Axis"][$AxisID]);
-								$TxtPos = $this->myPicture->getTextBox(0, 0, $DisplayFont, $DisplaySize, 0, $Caption);
-								$TxtWidth = $TxtPos[1]["X"] - $TxtPos[0]["X"] + $TxtMargin;
-								if ($DisplayPos == LABEL_POS_INSIDE && abs($TxtWidth) < abs($BarWidth)) {
+								list($TxtWidth, ) = $this->myPicture->getTextBoxStdHW($DisplayFont, $DisplaySize, $Caption);
+								$TxtWidth += $TxtMargin;
+								if ($DisplayPos == LABEL_POS_INSIDE && $TxtWidth < abs($BarWidth)) {
 									$CenterX = ($X2 - $X1) / 2 + $X1;
 									$CenterY = (($Y + $YOffset + $YSize - $YSpace) - ($Y + $YOffset + $YSpace)) / 2 + ($Y + $YOffset + $YSpace);
 									$this->myPicture->drawText($CenterX, $CenterY, $Caption, ["Color" => $DisplayColor,"Align" => TEXT_ALIGN_MIDDLEMIDDLE,"FontSize" => $DisplaySize]);
@@ -1545,9 +1545,7 @@ class pCharts
 								$BarHeight = abs($Y2 - $Y1) - 2;
 								$BarWidth = $XSize + ($XOffset / 2) - $FontFactor;
 								$Caption = $this->myPicture->scaleFormat(round($Serie["Data"][$Key], $DisplayRound), $Data["Axis"][$AxisID]);
-								$TxtPos = $this->myPicture->getTextBox(0, 0, $DisplayFont, $DisplaySize, 0, $Caption);
-								$TxtHeight = abs($TxtPos[2]["Y"] - $TxtPos[0]["Y"]);
-								$TxtWidth = abs($TxtPos[1]["X"] - $TxtPos[0]["X"]);
+								list($TxtWidth, $TxtHeight) = $this->myPicture->getTextBoxStdHW($DisplayFont, $DisplaySize, $Caption);
 								$XCenter = (($X + $XOffset + $XSize) - ($X + $XOffset)) / 2 + $X + $XOffset;
 								$YCenter = (($Y2) - ($Y1 - $YSpaceUp + $YSpaceDown)) / 2 + $Y1 - $YSpaceUp + $YSpaceDown;
 								$Done = FALSE;
@@ -1620,9 +1618,7 @@ class pCharts
 								$BarWidth = abs($X2 - $X1) - $FontFactor;
 								$BarHeight = $YSize + ($YOffset / 2) - $FontFactor / 2;
 								$Caption = $this->myPicture->scaleFormat(round($Serie["Data"][$Key], $DisplayRound), $Data["Axis"][$AxisID]);
-								$TxtPos = $this->myPicture->getTextBox(0, 0, $DisplayFont, $DisplaySize, 0, $Caption);
-								$TxtHeight = abs($TxtPos[2]["Y"] - $TxtPos[0]["Y"]);
-								$TxtWidth = abs($TxtPos[1]["X"] - $TxtPos[0]["X"]);
+								list($TxtWidth, $TxtWidth) = $this->myPicture->getTextBoxStdHW($DisplayFont, $DisplaySize, $Caption);
 								$XCenter = ($X2 - $X1) / 2 + $X1;
 								$YCenter = (($Y + $YOffset + $YSize) - ($Y + $YOffset)) / 2 + $Y + $YOffset;
 								$Done = FALSE;
