@@ -1550,40 +1550,40 @@ class pDraw
 				($IconAreaHeight < $PicHeight) AND $IconAreaHeight = $PicHeight;
 			}
 		}
-		# $FontSize or $this->FontSize ?? TODO
-		$YStep = max($this->FontSize, $IconAreaHeight) + 5;
+		
+		$Boundaries = ["L" => 100, "T" => 100, "R" => 0, "B" => 0];
+		$YStep = max($FontSize, $IconAreaHeight) + 5;
 		#$XStep = $IconAreaWidth + 5;
 		$XStep = $XSpacing;
 		$X = 100;
 		$Y = 100;
-		$Boundaries = ["L" => $X, "T" => 100, "R" => 0, "B" => 0];
-		$vY = $Y;
+
 		foreach($Data["Series"] as $SerieName => $Serie) {
 			if ($Serie["isDrawable"] && $SerieName != $Data["Abscissa"]) {
 				$Lines = explode(PHP_EOL, $Serie["Description"]);
 				if ($Mode == LEGEND_VERTICAL) {
-					$BoxArray = $this->getTextBox($X + $IconAreaWidth + 4, $vY + $IconAreaHeight / 2, $FontName, $FontSize, 0, $Serie["Description"]);
+					$BoxArray = $this->getTextBox($X + $IconAreaWidth + 4, $Y + $IconAreaHeight / 2, $FontName, $FontSize, 0, $Serie["Description"]);
 					($Boundaries["T"] > $BoxArray[2]["Y"] + $IconAreaHeight / 2) AND $Boundaries["T"] = $BoxArray[2]["Y"] + $IconAreaHeight / 2;
 					($Boundaries["R"] < $BoxArray[1]["X"] + 2) AND $Boundaries["R"] = $BoxArray[1]["X"] + 2;
 					($Boundaries["B"] < $BoxArray[1]["Y"] + 2 + $IconAreaHeight / 2) AND $Boundaries["B"] = $BoxArray[1]["Y"] + 2 + $IconAreaHeight / 2;
-					$vY = $vY + max($this->FontSize * count($Lines), $IconAreaHeight) + 5;
+					$Y = $Y + max($FontSize * count($Lines), $IconAreaHeight) + 5;
 				} elseif ($Mode == LEGEND_HORIZONTAL) {
 					$Width = [];
 					foreach($Lines as $Key => $Value) {
-						$BoxArray = $this->getTextBox($X + $IconAreaWidth + 6, $vY + $IconAreaHeight / 2 + (($this->FontSize + 3) * $Key), $FontName, $FontSize, 0, $Value);
+						$BoxArray = $this->getTextBox($X + $IconAreaWidth + 6, $Y + $IconAreaHeight / 2 + (($FontSize + 3) * $Key), $FontName, $FontSize, 0, $Value);
 						($Boundaries["T"] > $BoxArray[2]["Y"] + $IconAreaHeight / 2) AND $Boundaries["T"] = $BoxArray[2]["Y"] + $IconAreaHeight / 2;
 						($Boundaries["R"] < $BoxArray[1]["X"] + 2) AND $Boundaries["R"] = $BoxArray[1]["X"] + 2;
 						($Boundaries["B"] < $BoxArray[1]["Y"] + 2 + $IconAreaHeight / 2) AND $Boundaries["B"] = $BoxArray[1]["Y"] + 2 + $IconAreaHeight / 2;
 						$Width[] = $BoxArray[1]["X"];
 					}
-					$X = max($Width) + $XStep;
+					$X = max($Width) + $XStep; 
 				}
 			}
 		}
 
-		$vY = $vY - $YStep;
+		$Y -= $YStep;
 		$TopOffset = 100 - $Boundaries["T"];
-		($Boundaries["B"] - ($vY + $IconAreaHeight) < $TopOffset) AND $Boundaries["B"] = $vY + $IconAreaHeight + $TopOffset;
+		($Boundaries["B"] - ($Y + $IconAreaHeight) < $TopOffset) AND $Boundaries["B"] = $Y + $IconAreaHeight + $TopOffset;
 
 		return [
 			"Width" => ($Boundaries["R"] + $Margin) - ($Boundaries["L"] - $Margin),
