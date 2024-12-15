@@ -1850,31 +1850,19 @@ class pDraw
 
 			} elseif ($Mode == SCALE_MODE_ADDALL || $Mode == SCALE_MODE_ADDALL_START0) {
 
-				$Series = [];
-				foreach($Data["Series"] as $SerieID => $SerieParameter) {
-					if ($SerieParameter["Axis"] == $AxisID && $SerieParameter["isDrawable"] && $Abscissa != $SerieID) {
-						$Series[$SerieID] = count($Data["Series"][$SerieID]["Data"]);
+				$sArray = [];
+				$AxisMin = 0;
+				foreach ($Data["Series"] as $SerieID => $d) {
+					if ($d["Axis"] == $AxisID && $d["isDrawable"] && $Abscissa != $SerieID) {
+					  foreach ($d["Data"] as $id => $value) {
+						isset($sArray[$id]) || $sArray[$id] = 0;
+						$sArray[$id] += $value;
+						$AxisMin = min($value, $AxisMin);
+					  }
 					}
 				}
 
-				for ($ID = 0; $ID <= max($Series) - 1; $ID++) {
-					$PointMin = 0;
-					$PointMax = 0;
-					foreach($Series as $SerieID => $ValuesCount) { # TODO
-						if (isset($Data["Series"][$SerieID]["Data"][$ID]) && !is_null($Data["Series"][$SerieID]["Data"][$ID])) {
-							$Value = $Data["Series"][$SerieID]["Data"][$ID];
-							if ($Value > 0) {
-								$PointMax += $Value;
-							} else {
-								$PointMin += $Value;
-							}
-						}
-					}
-
-					$AxisMax = max($AxisMax, $PointMax);
-					$AxisMin = min($AxisMin, $PointMin);
-				}
-
+				$AxisMax = max($sArray);
 				$AutoMargin = (($AxisMax - $AxisMin) / 100) * $XReleasePercent;
 				$Data["Axis"][$AxisID]["Min"] = $AxisMin - $AutoMargin;
 				$Data["Axis"][$AxisID]["Max"] = $AxisMax + $AutoMargin;
