@@ -426,13 +426,12 @@ class pData
 		if(!$forLegend){
 			$SeriesData = $this->Data["Series"];
 			$left = array_diff(array_keys($SeriesData), [$this->Data["Abscissa"]]);
-
 			if (count($left) != 1){
 				throw pException::PieNoDataSerieException();
 			}
 
 			/* Remove unused data clean0Values */
-			$Values = array_shift($SeriesData)["Data"];
+			$Values = $SeriesData[$left[0]]["Data"];
 
 			foreach($Values as $key => $v) {
 				 if ($v == NULL || $v == 0) {
