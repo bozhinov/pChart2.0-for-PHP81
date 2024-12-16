@@ -57,13 +57,13 @@ class pData
 	}
 
 	/* Initialize a given serie */
-	public function initialise(string $Serie)
+	public function initialise(string $SerieName)
 	{
 		$Id = count($this->Data["Series"]);
 
-		$this->Data["Series"][$Serie] = [
+		$this->Data["Series"][$SerieName] = [
 			"Data" => [],
-			"Description" => $Serie,
+			"Description" => $SerieName,
 			"isDrawable" => TRUE,
 			"Picture" => NULL,
 			"Max" => 0,
@@ -108,10 +108,10 @@ class pData
 	}
 
 	/* Remove a serie from the pData object */
-	public function removeSerie(string $Serie)  # UNUSED
+	public function removeSerie(string $SerieName)  # UNUSED
 	{
-		if (isset($this->Data["Series"][$Serie])) {
-			unset($this->Data["Series"][$Serie]);
+		if (isset($this->Data["Series"][$SerieName])) {
+			unset($this->Data["Series"][$SerieName]);
 		} else {
 			throw pException::InvalidInput("Invalid serie name");
 		}
@@ -136,35 +136,35 @@ class pData
 		setSerieWeight
 		setSerieTicks
 	*/
-	public function setSerieProperties(string $Serie, array $Props)
+	public function setSerieProperties(string $SerieName, array $Props)
 	{
-		if (!isset($this->Data["Series"][$Serie])) {
+		if (!isset($this->Data["Series"][$SerieName])) {
 			throw pException::InvalidInput("Invalid serie name");
 		}
 
-		(isset($Props["Picture"]))    	AND $this->Data["Series"][$Serie]["Picture"]     = strval($Props["Picture"]);
-		(isset($Props["Description"])) 	AND $this->Data["Series"][$Serie]["Description"] = strval($Props["Description"]);
-		(isset($Props["Shape"]))  	AND $this->Data["Series"][$Serie]["Shape"]  	 = intval($Props["Shape"]);
-		(isset($Props["isDrawable"]))   AND $this->Data["Series"][$Serie]["isDrawable"]  = boolval($Props["isDrawable"]);
-		(isset($Props["Ticks"]))   	AND $this->Data["Series"][$Serie]["Ticks"]  	 = intval($Props["Ticks"]);
-		(isset($Props["Weight"]))   	AND $this->Data["Series"][$Serie]["Weight"]  	 = intval($Props["Weight"]);
+		(isset($Props["Picture"]))    	AND $this->Data["Series"][$SerieName]["Picture"]     = strval($Props["Picture"]);
+		(isset($Props["Description"])) 	AND $this->Data["Series"][$SerieName]["Description"] = strval($Props["Description"]);
+		(isset($Props["Shape"]))  		AND $this->Data["Series"][$SerieName]["Shape"]  	 = intval($Props["Shape"]);
+		(isset($Props["isDrawable"]))   AND $this->Data["Series"][$SerieName]["isDrawable"]  = boolval($Props["isDrawable"]);
+		(isset($Props["Ticks"]))   		AND $this->Data["Series"][$SerieName]["Ticks"]  	 = intval($Props["Ticks"]);
+		(isset($Props["Weight"]))   	AND $this->Data["Series"][$SerieName]["Weight"]  	 = intval($Props["Weight"]);
 	}
 
 	/* Set the description of a given serie */
-	public function setSerieDescription(string $Serie, string $Description)
+	public function setSerieDescription(string $SerieName, string $Description)
 	{
-		if (isset($this->Data["Series"][$Serie])) {
-			$this->Data["Series"][$Serie]["Description"] = $Description;
+		if (isset($this->Data["Series"][$SerieName])) {
+			$this->Data["Series"][$SerieName]["Description"] = $Description;
 		} else {
 			throw pException::InvalidInput("Invalid serie name");
 		}
 	}
 
 	/* Set the serie that will be used as abscissa */
-	public function setAbscissa(string $Serie, array $Props = [])
+	public function setAbscissa(string $SerieName, array $Props = [])
 	{
-		if (isset($this->Data["Series"][$Serie])) {
-			$this->Data["Abscissa"] = $Serie;
+		if (isset($this->Data["Series"][$SerieName])) {
+			$this->Data["Abscissa"] = $SerieName;
 
 			if (!empty($Props)){
 				(isset($Props["Name"]))    AND $this->Data["AbscissaProperties"]["Name"]    = strval($Props["Name"]);
@@ -343,9 +343,9 @@ class pData
 	}
 
 	/* Associate one data serie with one axis */
-	public function setSerieOnAxis(string $Serie, int $AxisID)
+	public function setSerieOnAxis(string $SerieName, int $AxisID)
 	{
-		$PreviousAxis = $this->Data["Series"][$Serie]["Axis"];
+		$PreviousAxis = $this->Data["Series"][$SerieName]["Axis"];
 		/* Create missing axis */
 		if (!isset($this->Data["Axis"][$AxisID])) {
 			$this->Data["Axis"][$AxisID]["Position"] = AXIS_POSITION_LEFT;
@@ -355,7 +355,7 @@ class pData
 			$this->Data["Axis"][$AxisID]["Display"] = NULL;
 		}
 
-		$this->Data["Series"][$Serie]["Axis"] = $AxisID;
+		$this->Data["Series"][$SerieName]["Axis"] = $AxisID;
 		/* Cleanup unused axis */
 		$Found = FALSE;
 		foreach($this->Data["Series"] as $SerieName => $Values) {
@@ -371,11 +371,11 @@ class pData
 
 	/* Set the color of one serie */
 	/* Momchil: tried to refactor. did not work */
-	public function setPalette(string $Serie, pColor $Color)
+	public function setPalette(string $SerieName, pColor $Color)
 	{
-		if (isset($this->Data["Series"][$Serie])) {
-			$Old = $this->Data["Series"][$Serie]["Color"];
-			$this->Data["Series"][$Serie]["Color"] = $Color;
+		if (isset($this->Data["Series"][$SerieName])) {
+			$Old = $this->Data["Series"][$SerieName]["Color"];
+			$this->Data["Series"][$SerieName]["Color"] = $Color;
 			/* Do reverse processing on the internal palette array */
 			foreach($this->Palette as $Key => $Value) {
 				if ($Value == $Old) {
@@ -574,5 +574,4 @@ class pData
 			$this->Data[$key] = $value;
 		}
 	}
-
 }

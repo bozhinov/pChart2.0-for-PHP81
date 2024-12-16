@@ -824,7 +824,6 @@ class pDraw
 			for ($i = 0; $i <= $Distance; $i++) {
 				$this->drawAntialiasPixel($i * $XStep + $X1, $i * $YStep + $Y1, $Color);
 			}
-
 		} else {
 
 			for ($i = 0; $i <= $Distance; $i++) {
@@ -859,7 +858,7 @@ class pDraw
 	{
 		$Color = isset($Format["Color"]) ? $Format["Color"] : new pColor(0);
 		$Ticks = isset($Format["Ticks"]) ? $Format["Ticks"] : NULL;
-		$Mask =  isset($Format["Mask"])  ? $Format["Mask"]  : [];
+		$Mask  = isset($Format["Mask"])  ? $Format["Mask"]  : [];
 
 		$Height = abs($Height);
 		$Width = abs($Width);
@@ -1327,7 +1326,13 @@ class pDraw
 		$RestoreShadow = $this->Shadow;
 		if ($this->Shadow) {
 			$this->Shadow = FALSE;
-			$this->drawArrow($X1 + $this->ShadowX, $Y1 + $this->ShadowY, $X2 + $this->ShadowX, $Y2 + $this->ShadowY, ["FillColor" => $this->ShadowColor,"Size" => $Size,"Ratio" => $Ratio,"TwoHeads" => $TwoHeads,"Ticks" => $Ticks]);
+			$this->drawArrow(
+				$X1 + $this->ShadowX,
+				$Y1 + $this->ShadowY,
+				$X2 + $this->ShadowX,
+				$Y2 + $this->ShadowY,
+				["FillColor" => $this->ShadowColor,"Size" => $Size,"Ratio" => $Ratio,"TwoHeads" => $TwoHeads,"Ticks" => $Ticks]
+			);
 		}
 
 		/* Draw the 1st Head */
@@ -3695,25 +3700,24 @@ class pDraw
 		$XMin = $X - 5 - intval(floor(($BoxWidth - 10) / 2));
 		$XMax = $X + 5 + intval(floor(($BoxWidth - 10) / 2));
 		$RestoreShadow = $this->Shadow;
-		$ShadowX = $this->ShadowX;
 
 		if ($this->Shadow) {
 			$this->Shadow = FALSE;
 			$Poly = [
-				$X + $ShadowX,
-				$Y + $ShadowX,
-				$X + 5 + $ShadowX,
-				$Y - 5 + $ShadowX,
-				$XMax + $ShadowX,
-				$Y - 5 + $ShadowX,
-				$XMax + $ShadowX,
-				$Y - 5 - $BoxHeight + $ShadowX,
-				$XMin + $ShadowX,
-				$Y - 5 - $BoxHeight + $ShadowX,
-				$XMin +  $ShadowX,
-				$Y - 5 + $ShadowX,
-				$X - 5 + $ShadowX,
-				$Y - 5 + $ShadowX
+				$X + $this->ShadowX,
+				$Y + $this->ShadowX,
+				$X + 5 + $this->ShadowX,
+				$Y - 5 + $this->ShadowX,
+				$XMax + $this->ShadowX,
+				$Y - 5 + $this->ShadowX,
+				$XMax + $this->ShadowX,
+				$Y - 5 - $BoxHeight + $this->ShadowX,
+				$XMin + $this->ShadowX,
+				$Y - 5 - $BoxHeight + $this->ShadowX,
+				$XMin +  $this->ShadowX,
+				$Y - 5 + $this->ShadowX,
+				$X - 5 + $this->ShadowX,
+				$Y - 5 + $this->ShadowX
 			];
 
 			$this->drawPolygon($Poly, ["Color" => $this->ShadowColor]);
@@ -3787,23 +3791,19 @@ class pDraw
 	/* Draw a basic shape */
 	public function drawShape($X, $Y, $Shape, $PlotSize, $PlotBorder, $BorderSize, pColor $Color, pColor $BorderColor)
 	{
+		if ($PlotBorder) {
+			$Color = $BorderColor;
+			$PlotSize += $BorderSize;
+		}
+
 		switch ($Shape){
 			case SERIE_SHAPE_FILLEDCIRCLE:
-				if ($PlotBorder) {
-					$this->drawFilledCircle($X, $Y, $PlotSize + $BorderSize, ["Color" => $BorderColor]);
-				}
 				$this->drawFilledCircle($X, $Y, $PlotSize,["Color" => $Color]);
 				break;
 			case SERIE_SHAPE_FILLEDSQUARE:
-				if ($PlotBorder) {
-					$this->drawFilledRectangle($X - $PlotSize - $BorderSize, $Y - $PlotSize - $BorderSize, $X + $PlotSize + $BorderSize, $Y + $PlotSize + $BorderSize, ["Color" => $BorderColor]);
-				}
 				$this->drawFilledRectangle($X - $PlotSize, $Y - $PlotSize, $X + $PlotSize, $Y + $PlotSize, ["Color" => $Color]);
 				break;
 			case SERIE_SHAPE_FILLEDTRIANGLE:
-				if ($PlotBorder) {
-					$this->drawPolygon([$X, $Y - $PlotSize - $BorderSize, $X - $PlotSize - $BorderSize, $Y + $PlotSize + $BorderSize, $X + $PlotSize + $BorderSize, $Y + $PlotSize + $BorderSize], ["Color" => $BorderColor]);
-				}
 				$this->drawPolygon([$X, $Y - $PlotSize, $X - $PlotSize, $Y + $PlotSize, $X + $PlotSize, $Y + $PlotSize], ["Color" => $Color]);
 				break;
 			case SERIE_SHAPE_TRIANGLE:
@@ -3818,12 +3818,9 @@ class pDraw
 				$this->drawCircle($X, $Y, $PlotSize, $PlotSize, ["Color" => $Color]);
 				break;
 			case SERIE_SHAPE_DIAMOND:
-				$this->drawPolygon([$X - $PlotSize, $Y, $X, $Y - $PlotSize, $X + $PlotSize, $Y, $X, $Y + $PlotSize], ["NoFill" => TRUE,"Color" => $BorderColor]);
+				$this->drawPolygon([$X - $PlotSize, $Y, $X, $Y - $PlotSize, $X + $PlotSize, $Y, $X, $Y + $PlotSize], ["NoFill" => TRUE,"Color" => $Color]);
 				break;
 			case SERIE_SHAPE_FILLEDDIAMOND:
-				if ($PlotBorder) {
-					$this->drawPolygon([$X - $PlotSize - $BorderSize, $Y, $X, $Y - $PlotSize - $BorderSize, $X + $PlotSize + $BorderSize, $Y, $X, $Y + $PlotSize + $BorderSize], ["Color" => $BorderColor]);
-				}
 				$this->drawPolygon([$X - $PlotSize, $Y, $X, $Y - $PlotSize, $X + $PlotSize, $Y, $X, $Y + $PlotSize], ["Color" => $Color]);
 				break;
 		}
