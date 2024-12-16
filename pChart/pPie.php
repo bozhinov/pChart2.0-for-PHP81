@@ -124,7 +124,7 @@ class pPie
 					}
 				}
 
-				$Plots[] = $Xc;
+				$Plots[] = round($Xc, PHP_ROUND_HALF_DOWN);
 				$Plots[] = round($Yc);
 
 			}
@@ -189,14 +189,14 @@ class pPie
 					$Yc = sin(deg2rad($i - 90)) * $Radius + $Y;
 					if ($i == $Offset) {
 						# Momchil: visual fix
-						$this->myPicture->drawLine($Xc+0.2, $Yc, $X0+0.4, $Y0, $Settings);
+						$this->myPicture->drawLine($Xc+1, $Yc+1, $X0, $Y0, $Settings);
 					}
 					$this->myPicture->drawAntialiasPixel($Xc, $Yc, $Settings["Color"]);
 					# Momchil: visual fix
-					$this->myPicture->drawAntialiasPixel($Xc + 1, $Yc, $Settings["Color"]);
+					$this->myPicture->drawAntialiasPixel($Xc+1, $Yc, $Settings["Color"]);
 				}
-
-				$this->myPicture->drawLine($Xc, $Yc, $X0, $Y0, $Settings);
+				# Momchil: visual fix
+				$this->myPicture->drawLine($Xc+1, $Yc+1, $X0, $Y0, $Settings);
 				if ($DrawLabels && !$Shadow) {
 
 					if ($LabelColorType == PIE_LABEL_COLOR_AUTO) {
