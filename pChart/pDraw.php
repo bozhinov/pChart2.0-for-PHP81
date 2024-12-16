@@ -3772,12 +3772,15 @@ class pDraw
 			list(,$CaptionHeight) = $this->getTextBoxStdHW($FontName, $FontSize, $Caption["Caption"]);
 			/* Write the serie color if needed */
 			if ($DrawSerieColor) {
-				$BoxSettings = ["Color" => $Caption["Color"],"BorderColor" => new pColor(0)];
-				$this->drawFilledRectangle($XMin + $VerticalMargin, $YPos - $SerieBoxSize, $XMin + $VerticalMargin + $SerieBoxSize, $YPos, $BoxSettings);
-			}
-
-			/* Momchil: visual fix */
-			if (!$DrawSerieColor) {
+				$this->drawFilledRectangle(
+					$XMin + $VerticalMargin,
+					$YPos - $SerieBoxSize,
+					$XMin + $VerticalMargin + $SerieBoxSize,
+					$YPos,
+					["Color" => $Caption["Color"],"BorderColor" => new pColor(0)]
+				);
+			} else {
+				/* Momchil: visual fix example.drawLabel.caption */
 				$YPos += 3;
 			}
 
