@@ -65,5 +65,5 @@ $pCharts->drawLineChart();
 $pCharts->drawPlotChart(["PlotBorder"=>TRUE,"PlotSize"=>3,"BorderSize"=>1,"Surrounding"=>-60,"BorderColor"=>new pColor(50,50,50,80)]);
 
 /* Render the picture (choose the best way) */
-$myPicture->autoOutput("temp/example.drawAreaChart.simple.png");
+$myPicture->autoOutput("temp/example.drawAreaChart.enhanced.png");
 
