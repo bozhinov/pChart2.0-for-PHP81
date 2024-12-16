@@ -3801,7 +3801,7 @@ class pDraw
 
 		switch ($Shape){
 			case SERIE_SHAPE_FILLEDCIRCLE:
-				$this->drawFilledCircle($X, $Y, $PlotSize,["Color" => $Color]);
+				$this->drawFilledCircle($X, $Y, $PlotSize, ["Color" => $Color]);
 				break;
 			case SERIE_SHAPE_FILLEDSQUARE:
 				$this->drawFilledRectangle($X - $PlotSize, $Y - $PlotSize, $X + $PlotSize, $Y + $PlotSize, ["Color" => $Color]);
@@ -3821,7 +3821,7 @@ class pDraw
 				$this->drawCircle($X, $Y, $PlotSize, $PlotSize, ["Color" => $Color]);
 				break;
 			case SERIE_SHAPE_DIAMOND:
-				$this->drawPolygon([$X - $PlotSize, $Y, $X, $Y - $PlotSize, $X + $PlotSize, $Y, $X, $Y + $PlotSize], ["NoFill" => TRUE,"Color" => $Color]);
+				$this->drawPolygon([$X - $PlotSize, $Y, $X, $Y - $PlotSize, $X + $PlotSize, $Y, $X, $Y + $PlotSize], ["NoFill" => TRUE, "Color" => $BorderColor]);
 				break;
 			case SERIE_SHAPE_FILLEDDIAMOND:
 				$this->drawPolygon([$X - $PlotSize, $Y, $X, $Y - $PlotSize, $X + $PlotSize, $Y, $X, $Y + $PlotSize], ["Color" => $Color]);
