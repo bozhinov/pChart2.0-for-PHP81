@@ -606,7 +606,7 @@ class pScatter
 		foreach($Data["ScatterSeries"] as $Series) {
 			if ($Series["isDrawable"]) {
 
-				$Lines = explode(PHP_EOL, $Series["Description"]);
+				$Lines = explode("\n", $Series["Description"]);
 
 				if ($Mode == LEGEND_VERTICAL) {
 					$BoxArray = $this->myPicture->getTextBox($vX + $IconAreaWidth + 4, $vY + $HalfIconAreaHeight, $FontName, $FontSize, 0, $Series["Description"]);
@@ -676,7 +676,7 @@ class pScatter
 					}
 				}
 
-				$Lines = explode(PHP_EOL, $Series["Description"]);
+				$Lines = explode("\n", $Series["Description"]);
 
 				if ($Mode == LEGEND_VERTICAL) {
 					foreach($Lines as $Key => $Value) {
@@ -728,7 +728,7 @@ class pScatter
 		foreach($Data["ScatterSeries"] as $Series) {
 			if ($Series["isDrawable"]) {
 
-				$Lines = explode(PHP_EOL, $Serie["Description"]);
+				$Lines = explode("\n", $Serie["Description"]);
 
 				if ($Mode == LEGEND_VERTICAL) {
 					$BoxArray = $this->myPicture->getTextBox($vX + $IconAreaWidth + 4, $vY + $IconAreaHeight / 2, $FontName, $FontSize, 0, $Series["Description"]);
