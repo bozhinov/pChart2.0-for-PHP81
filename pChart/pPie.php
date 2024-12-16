@@ -762,11 +762,10 @@ class pPie
 			$Y2 = $Settings["Y2"];
 			$X3 = $Settings["X3"];
 			$this->myPicture->drawArrow($X2, $Y2, $X1, $Y1, ["Size" => 8]);
+			$this->myPicture->drawLine($X2, $Y2, $X3, $Y2);
 			if ($Settings["Angle"] <= 180) {
-				$this->myPicture->drawLine($X2, $Y2, $X3, $Y2);
 				$this->myPicture->drawText($X3 + 2, $Y2, $Settings["Label"], ["Align" => TEXT_ALIGN_MIDDLELEFT]);
 			} else {
-				$this->myPicture->drawLine($X2, $Y2, $X3, $Y2);
 				$this->myPicture->drawText($X3 - 2, $Y2, $Settings["Label"], ["Align" => TEXT_ALIGN_MIDDLERIGHT]);
 			}
 		}
@@ -889,15 +888,35 @@ class pPie
 				$Plots[] = $Xc;
 				$Plots[] = round($Yc);
 			}
-
+			
 			$Boundaries[0]["X2"] = $Xc;
 			$Boundaries[0]["Y2"] = $Yc;
+
+			# Momchil: Visual FIX
+			if ($EndAngle < 180) {
+				$Boundaries[1]["X2"]++;
+			}
+
+			if ($EndAngle > 180 && $EndAngle < 270) {
+				$Boundaries[0]["X1"]++;
+				$Boundaries[0]["Y1"]++;
+				$Boundaries[0]["Y2"]++;
+				$Boundaries[1]["Y2"]++;
+			}
+
+			if ($EndAngle > 270) {
+				$Boundaries[0]["Y2"]++;
+				$Boundaries[0]["Y1"]++;
+			}
+
 			/* Draw the polygon */
 			$this->myPicture->drawPolygon($Plots, $Settings);
 
 			/* Smooth the edges using AA */
 			foreach($AAPixels as $Pos) {
 				$this->myPicture->drawAntialiasPixel($Pos[0], $Pos[1], $BorderSettings["Color"]);
+				# Momchil: Visual fix example.draw2DRingValue
+				$this->myPicture->drawAntialiasPixel($Pos[0], $Pos[1]+1, $BorderSettings["Color"]);
 			}
 
 			$this->myPicture->drawLine($Boundaries[0]["X1"], $Boundaries[0]["Y1"], $Boundaries[0]["X2"], $Boundaries[0]["Y2"], $BorderSettings);
