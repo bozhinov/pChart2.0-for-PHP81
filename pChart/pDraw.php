@@ -1565,7 +1565,7 @@ class pDraw
 
 		foreach($Data["Series"] as $SerieName => $Serie) {
 			if ($Serie["isDrawable"] && $SerieName != $Data["Abscissa"]) {
-				$Lines = explode(PHP_EOL, $Serie["Description"]);
+				$Lines = explode("\n", $Serie["Description"]);
 				if ($Mode == LEGEND_VERTICAL) {
 					$BoxArray = $this->getTextBox($X + $IconAreaWidth + 4, $Y + $IconAreaHeight / 2, $FontName, $FontSize, 0, $Serie["Description"]);
 					($Boundaries["T"] > $BoxArray[2]["Y"] + $IconAreaHeight / 2) AND $Boundaries["T"] = $BoxArray[2]["Y"] + $IconAreaHeight / 2;
@@ -1648,7 +1648,7 @@ class pDraw
 		$vX = $X;
 		foreach($Data["Series"] as $SerieName => $Serie) {
 			if ($Serie["isDrawable"] && $SerieName != $Data["Abscissa"]) {
-				$Lines = explode(PHP_EOL, $Serie["Description"]);
+				$Lines = explode("\n", $Serie["Description"]);
 				if ($Mode == LEGEND_VERTICAL) {
 					$BoxArray = $this->getTextBox($vX + $IconAreaWidth + 4, $vY + $IconAreaHeight / 2, $FontName, $FontSize, 0, $Serie["Description"]);
 					($Boundaries["T"] > $BoxArray[2]["Y"] + $IconAreaHeight / 2) AND $Boundaries["T"] = $BoxArray[2]["Y"] + $IconAreaHeight / 2;
@@ -1715,7 +1715,7 @@ class pDraw
 					}
 				}
 
-				$Lines = explode(PHP_EOL, $Serie["Description"]);
+				$Lines = explode("\n", $Serie["Description"]);
 				if ($Mode == LEGEND_VERTICAL) {
 					foreach($Lines as $Key => $Value) {
 						$this->drawText($X + $IconAreaWidth + 4, $Y + $IconAreaHeight / 2 + (($this->FontSize + 3) * $Key), $Value, ["Color" => $FontColor,"Align" => TEXT_ALIGN_MIDDLELEFT,"FontSize" => $FontSize,"FontName" => $FontName]);
