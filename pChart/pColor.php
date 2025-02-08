@@ -14,10 +14,38 @@ namespace pChart;
 
 class pColor
 {
-	private $R;
-	private $G;
-	private $B;
-	private $Alpha;
+	private float $R {
+		get => $this->R;
+		set (float $val){
+			($val < 0) AND $val = 0;
+			($val > 255) AND $val = 255;
+			$this->R = $val;
+		}
+	}
+	private float $G {
+		get => $this->G;
+		set (float $val){
+			($val < 0) AND $val = 0;
+			($val > 255) AND $val = 255;
+			$this->G = $val;
+		}
+	}
+	private float $B {
+		get => $this->B;
+		set (float $val){
+			($val < 0) AND $val = 0;
+			($val > 255) AND $val = 255;
+			$this->B = $val;
+		}
+	}
+	private float $Alpha {
+		get => $this->Alpha;
+		set (float $val){
+			($val < 0) AND $val = 0;
+			($val > 100) AND $val = 100;
+			$this->Alpha = $val;
+		}
+	}
 
 	/* Floats are required for pGradient */
 	public function __construct(float $R = 0, float $G = 0, float $B = 0, float $Alpha = 100)
@@ -29,7 +57,6 @@ class pColor
 				$this->G = $R;
 				$this->B = $R;
 				$this->Alpha = 100;
-				$this->validateRGB();
 				break;
 			case 3:
 			case 4:
@@ -37,7 +64,6 @@ class pColor
 				$this->G = $G;
 				$this->B = $B;
 				$this->Alpha = $Alpha;
-				$this->validateRGB();
 				break;
 			case 0: # random
 				$this->R = rand(0, 255);
@@ -45,16 +71,6 @@ class pColor
 				$this->B = rand(0, 255);
 				$this->Alpha = 100;
 		}
-	}
-
-	private function validateRGB()
-	{
-		($this->R < 0) AND $this->R = 0;
-		($this->G < 0) AND $this->G = 0;
-		($this->B < 0) AND $this->B = 0;
-		($this->R > 255) AND $this->R = 255;
-		($this->G > 255) AND $this->G = 255;
-		($this->B > 255) AND $this->B = 255;
 	}
 
 	public function toHex()
@@ -92,8 +108,6 @@ class pColor
 		$this->B += $Offsets["B"] * $Percent;
 		$this->AlphaChange($Offsets["Alpha"] * $Percent);
 
-		$this->validateRGB();
-
 		return $this;
 	}
 
@@ -102,8 +116,6 @@ class pColor
 		$this->R += $howmuch;
 		$this->G += $howmuch;
 		$this->B += $howmuch;
-
-		$this->validateRGB();
 
 		return $this;
 	}
@@ -150,5 +162,4 @@ class pColor
 	{
 		return (clone $this);
 	}
-
 }
